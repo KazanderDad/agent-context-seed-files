@@ -4,7 +4,9 @@ alwaysApply: true
 ---
 
 # workflow.md
-This workflow follows three sections 1. Start of session, 2. Coding session, 3. Lint and test. 4. End of session. 
+- This workflow follows steps: 1. Start of session, 2. Coding session, 3. Lint and test. 4. End of session. 
+- Steps are mandatory unless marked optional. 
+- Iteration is allowed and encouraged.
 
 ---
 
@@ -12,21 +14,14 @@ This workflow follows three sections 1. Start of session, 2. Coding session, 3. 
 
 ---
 
-### Load context versioning context (mandatory)
-  * Read the last entry or last few entries in `agent-context/session-log.md`
+### Session log and versioning context
+- Read the last entry in `/agent-context/session-log.md`
+- Version bump:
+  - If you are on a a new feature branch (or on Main): Increment session integer (e.g. from v1.0 to v2.0).
+  - If you are on a the same feature branch as previous session: Increment session decimal (e.g. from v2.0 to v2.1).
+- Start session log entry. Add a new entry in or around row 15, following this template:
 
----
-
-### Version bump (mandatory)
-  * If you are on a a new feature branch (or on Main): Increment session integer (e.g. from v1.0 to v2.0).
-  * If you are on a the same feature branch as previous session: Increment session decimal (e.g. from v2.0 to v2.1).
-
----
-
-### Start session log entry (mandatory)
-Add a new entry in or around row 14, following this template:
-
-```markdown
+```(markdown)
 ## Session vN.N
 - timestamp: **<ISO 8601 America/Toronto>**
 - agent: **<agent-name>** (e.g. OpenAI‑Codex)
@@ -38,29 +33,46 @@ Session objective: <natural-langauage summary of user request>
 
 ---
 
-### Load context (mandatory)
-* Read any agent-contest files and any agent-instructions files which are already in the repo and may be relevant to your sesssion objective.
+### Load context
+- Read any context files which are already in the following folders and may be relevant to your sesssion objective:
+  - '/agent-context/*.*'
+  - '/agent-instructions/*.*'
+- Read any additional external instruction files in the below folder which may be relevant to your sesssion objective:
+  - 'https://github.com/KazanderDad/agent-context-seed-files/tree/main/agent-instructions/*.*'
+
+FYI, these are the folders you can expect to find in the [external repo](https://github.com/KazanderDad/agent-context-seed-files/tree/main/agent-instructions/):
+| External instruction file | When to use |
+| --- | --- |
+| supabase-bootstrap.md | When initializing supabase into a repo |
+| postgres-sql-style-guide.md | Anytime supabase is used in the repo  |
+| supabase-declarative-schema.md | Anytime supabase is used in the repo  |
+| supabase-edge-functions.md | When you need to write or modify edge functions in supabase |
+| supabase-functions.md | When you need to write or modify database functions in supabase |
+| supabase-migrations.md | When the ci.yml has been or should be initialized with supabase migrations  |
+| supabase-rls-policies.md | Anytime supabase is used in the repo |
+| any other file | as per file content |
 
 ---
 
 ### Artefact creation (optional)
-* If mandatory or any required optional files are missing → copying seed files and templates from `https://github.com/KazanderDad/agent-context-seed-files/` into your repo.
-* Do not create these files from scratch (unless you need to create a file which is not available as a template or seed file). 
+If any optional files (see table below) are missing but should be added based on your session objectives, then:
+- Copy seed files and templates from `https://github.com/KazanderDad/agent-context-seed-files/` into your repo.
+- Do not create these files from scratch (unless you need to create a file which is not available as a template or seed file).
+- Source directory: `https://github.com/KazanderDad/agent-context-seed-files/tree/main/agent-context-optional`
+- Target directory: '/agent-context/'
 
-| Location | Optional file | When to create |
-| --- | --- | --- |
-| agent-context/ | app-context.md | When framing problem/value is helpful |
-| agent-context/ | user-stories.md | When personas or acceptance tests are useful |
-| agent-context/ | functional-spec.md | When framing problem/value is helpful |
-| agent-instructions/ | postgres-sql-style-guide.md | When  |
-| agent-instructions/ | supabase-bootstrap.md | When  |
-| agent-instructions/ | supabase-declarative-schema.md | When  |
-| agent-instructions/ | supabase-edge-functions.md | When  |
-| agent-instructions/ | supabase-functions.md | When  |
-| agent-instructions/ | supabase-migrations.md | When  |
-| agent-instructions/ | supabase-rls-policies.md | Anytime supabase is used in the repo |
+FYI, these are the folders you can expect to find in the external repo:
+| Optional file | When to copy to local repo |
+| --- | --- |
+| app-context.md | When framing problem/value is helpful |
+| user-stories.md | When personas or acceptance tests are useful |
+| functional-spec.md | When framing problem/value is helpful |
+| any other file | as per file content |
 
-Each new file must also be referenced in agent-context/spec.md under “Related Docs” (exception: SQL diff files, see step 4 below)
+
+After adding files:
+- Each new file must also be referenced in agent-context/spec.md under “Related Docs” -> add
+- Exception: SQL diff files (see step 4 below)
 
 ---
 
