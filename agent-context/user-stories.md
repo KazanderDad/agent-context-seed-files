@@ -1,4 +1,9 @@
-# user-stories.md
+---
+description: User stories for this App
+alwaysApply: false
+---
+
+## user-stories.md
 - updated: **2025-06-26T09:45:00-04:00**
 - during session version: **v0**
 - with session name: **Seed with empty template**
