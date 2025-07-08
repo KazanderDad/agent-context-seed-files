@@ -1,6 +1,9 @@
-# AGENTS.md  
-_Authoritative guide for all software-writing agents in this repository_
+---
+description: Authoritative guide for all software-writing agents in this repository
+alwaysApply: true
+---
 
+# AGENTS.md  
 ---
 
 ## 0 Philosophy
