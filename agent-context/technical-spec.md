@@ -1,3 +1,8 @@
+---
+description: Technical specification for this App
+alwaysApply: false
+---
+
 # technical-spec.md
 - updated: **2025-06-26T09:45:00-04:00**
 - during session version: **v0**
