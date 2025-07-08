@@ -9,21 +9,18 @@ Agents populate one heading level 3 for each coding sesssion, following the same
 - reflections
 - suggested next steps
 
-## For Each agent coding session
 ---
+
+## For Each agent coding session
+
+---
+
 ### session: v0
 - timestamp: <ISO 8601 America/Toronto>
 - agent: **OpenAI‑Codex**
 - session name: **Seed repo with empty template**
 - branch: **Main**
----
+
 Seeding this repo with empty templates.
 
 ---
-### session: vTemplate
-- timestamp: <ISO 8601 America/Toronto>
-- agent: **KazanderDad**
-- session name: **Session name**
-- branch: **Branch**
----
-Session objective, actions taken, reflections, & suggested next steps go here.
