@@ -7,7 +7,7 @@ alwaysApply: true
 Agents populate one heading level 3 for each coding sesssion, following the same format for each. Each session includes plain text descriptions of:
 - objective & summary ot actions taken
 - reflections
-- suggested next steps
+- suggested next steps & improvements to tests
 
 ---
 
