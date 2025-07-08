@@ -12,18 +12,18 @@ This workflow follows three sections 1. Start of session, 2. Coding session, 3. 
 
 ---
 
-### Load context versioning context
+### Load context versioning context (mandatory)
   * Read the last entry or last few entries in `agent-context/session-log.md`
 
 ---
 
-### **Version bump**  
+### Version bump (mandatory)
   * If you are on a a new feature branch (or on Main): Increment session integer (e.g. from v1.0 to v2.0).
   * If you are on a the same feature branch as previous session: Increment session decimal (e.g. from v2.0 to v2.1).
 
 ---
 
-### Start session log entry
+### Start session log entry (mandatory)
 Add a new entry in or around row 14, following this template:
 
 ```markdown
@@ -38,31 +38,41 @@ Session objective: <natural-langauage summary of user request>
 
 ---
 
-### Load context
-Read any spec files relevant to your sesssion objective
-
-### Optional artefact creation
-If mandatory files are missing → create with `v1` headers
-
-| Optional file | When to create | Header template |
-| --- | --- | --- |
-| user-stories.md | When personas or acceptance tests are useful | # User Stories v1 |
-| app-context.md | When framing problem/value is helpful | # App Context v1 |
-| sql-diff-v{N}.sql | First time SQL diff is needed | -- SQL Diff v0->v1 |
-
-Each new file must be referenced in agent-context/spec.md under “Related Docs”.
+### Load context (mandatory)
+* Read any agent-contest files and any agent-instructions files which are already in the repo and may be relevant to your sesssion objective.
 
 ---
 
-## Design-spec review & update
+### Artefact creation (optional)
+* If mandatory or any required optional files are missing → copying seed files and templates from `https://github.com/KazanderDad/agent-context-seed-files/` into your repo.
+* Do not create these files from scratch (unless you need to create a file which is not available as a template or seed file). 
+
+| Location | Optional file | When to create |
+| --- | --- | --- |
+| agent-context/ | app-context.md | When framing problem/value is helpful |
+| agent-context/ | user-stories.md | When personas or acceptance tests are useful |
+| agent-context/ | functional-spec.md | When framing problem/value is helpful |
+| agent-instructions/ | postgres-sql-style-guide.md | When  |
+| agent-instructions/ | supabase-bootstrap.md | When  |
+| agent-instructions/ | supabase-declarative-schema.md | When  |
+| agent-instructions/ | supabase-edge-functions.md | When  |
+| agent-instructions/ | supabase-functions.md | When  |
+| agent-instructions/ | supabase-migrations.md | When  |
+| agent-instructions/ | supabase-rls-policies.md | Anytime supabase is used in the repo |
+
+Each new file must also be referenced in agent-context/spec.md under “Related Docs” (exception: SQL diff files, see step 4 below)
+
+---
+
+## Design-spec review & update
 
 1. Update relevant spec files pertinent to the session objective.  
 2. Bump their internal version to match `v{N+1}`.  
-3. Do **not** touch spec files unrelated to this session.
+3. Do **not** touch specfiles unrelated to this session.
 
 ---
 
-## 2. Coding phase
+## 2. Coding phase (mandatory)
 Follow coding conventions from **AGENTS.md**, and also:
 
 * Detect hard-coded secrets → Refactor to env vars + update `.env.example`.  
@@ -73,7 +83,7 @@ Follow coding conventions from **AGENTS.md**, and also:
 
 ## 3. Lint and Test
 
-### Post-code automated tasks
+### Post-code automated tasks (mandatory)
 Before committing, run `pnpm test` from the repository root. The script currently prints a placeholder message but acts as a sanity check.
 
 ```bash
@@ -88,9 +98,23 @@ If tests reveal errors or warnings, then iterate back to the coding phase and im
 
 ---
 
-## End of Session
+## 4. End of Session
 
-### Update log & reflection
+### Create SQL diff file (optional)
+If the coding session resulted in new tables or columns, or in requirement to update the existing SQL in supabase, then create a new file with the required changes (e.g a Make Table statement)
+
+File name pattern: agent-context/sql-diff-v{N}.sql
+
+File header template:
+```markdown
+- Created as part of session v{N}
+- Apply to SQL Schema v{X} (where typically X = N-1 but sometimes applies to earlier version, for example if changes to N-1 were never implemented)
+- Updated: 2025-06-26T09:45:00-04:00
+- Target: Supabase
+```
+
+
+### Update log & reflection (mandatory)
 Append to the new session block in session-log.md
 - All key changes
 - At least one confusion encountered
@@ -113,6 +137,6 @@ Reflections:
 
 ---
 
-### Push commit
+### Push commit (optional)
 Use a scoped, descriptive message. 
 This step is optional, as it may be up to the user to accept before committing or creating a pull request.
