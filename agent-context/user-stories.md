@@ -1,8 +1,8 @@
 # user-stories.md
-updated: **2025-06-26T09:45:00-04:00**
-during session version: **v0**
-with session objective: **Seed with empty template**
-by: **OpenAI-Codex**
+- updated: **2025-06-26T09:45:00-04:00**
+- during session version: **v0**
+- with session name: **Seed with empty template**
+- by: **OpenAI-Codex**
 
 ## Primary User Roles
 - Guest (non-authenticated user)
