@@ -87,28 +87,3 @@ Agents **must** read `agent-setup.md` if artefacts are missing, otherwise follow
 * Pre-commit hook **warns** (not blocks) if ESLint and similar (e.g. in Foundry) cannot start.
 * Session log must bump version +1 for each session
 * All new external calls must use SafeERC20 / Address.functionCall and be covered in tests.
-
----
-
-## 5 Header Templates (for agents)
-
-```markdown
-<!-- spec.md, app-context.md, user-stories.md -->
-# Technical Spec v{N}
-updated: 2025-06-26T09:45:00-04:00
-by: OpenAI-Codex
-```
-
-```markdown
-<!-- sql-diff-v{N}.sql -->
--- SQL Update v{N}
--- Apply to SQL Schema v{X} (where typically X = N-1 but sometimes applies to earlier version)
--- updated: 2025-06-26T09:45:00-04:00
--- target: Supabase
-```
-
-```markdown
-<!-- All Solidity files -->
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.30;
-```
