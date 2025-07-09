@@ -22,7 +22,7 @@ alwaysApply: true
 ## 1 Repository Structure
 Source files are organized under the `contracts/evm/` directory while context files for agents are organized under agent-context/ with the following layout:
 ```
-.github/workflows        # Mandatory - PR template + CI workflows for build, lint, supabase, secret scanning
+.github/workflows/       # Mandatory - PR template + CI workflows for build, lint, supabase, secret scanning
 agent-context/           # designs, logs and other context files for developers and agents
 ├─ session-log.md        # Mandatory – append-only per session, new entries at top of file, v ↑ per edit
 ├─ technical-spec.md     # Mandatory – latest technical spec
@@ -36,35 +36,53 @@ components/              # shared components
 hooks/                   # custom React hooks
 lib/
 public/                  # static assets to be served
-scripts/
-├─ env-sync.ts
-├─ forge-coverage.sh
-└─ spec-lint.ts
+scripts/                 # helper scripts for env:sync, lint, etc
 styles/                  # global styles
 supabase/                # latest sql schema (github action runs db pull on PR)
 test/
 README.md                # intro to the project and this repo
 AGENTS.md                # this file
 agent-setup.md           # One-time boot-strap guide for agents
-
 ```
+
+*Note: If expected files are missing from .github/workflows or from agent-context/ then follow [these instructions](https://raw.githubusercontent.com/KazanderDad/agent-context-seed-files/refs/heads/main/agent-setup.md) to create them.*
 
 ---
 
 ## 2 Coding Conventions
 
-* **Framework** Foundry (forge + cast) & Hardhat for coverage; Solidity ^0.8.30
-* **Structure** Add or modify files within the structure above if possible. If you need to add folders then also update both AGENTS.md (this file) and README.md folder diagrams.
+* **Framework & Versions**
+  * Nextjs v15.3
+  * Nodejs v24
+  * Foundry (forge + cast) & Hardhat for coverage; Solidity ^0.8.30
+* **Structure**
+  * Add or modify files within the structure above if possible.
+  * If you need to add folders then also update both AGENTS.md (this file) and README.md folder diagrams.
 * **Lint / Format**  
   * **TypeScript** → ESLint + Prettier  
   * **Solidity**   → `solhint` (or `solidity-lint`) + Prettier plugin  
   * `pnpm lint` runs **both** (`pnpm lint:ts && pnpm lint:sol`)
-* **Tabs / Indent** Four spaces in solidity, two spaces in typescript (no hard tabs)  
-* **Env handling** Update `.env.example` with *names* of new vars (never values). Boolean flags must be 'true'/'false' strings to avoid docker‑compose parsing quirks. 
-* **Secrets scan** Detect hard-coded keys; suggest env refactor  
-* **Testing** Jest / Vitest for JavaScript units; Foundry for Solidity; Cypress for front-end e2e (if present).
-* **Pull Requests** Keep pull request descriptions short and, if known, mention which issue(s) are affected.
-* **Contract version tags** Follow SemVer (v2.0.0-alpha). Template IDs ("v1", "v2") mirror major versions only. (Versioning of Contracts is different from versioning agent sessions and correlated spec documents).
+* **Tabs / Indent**
+  * Four spaces in solidity, two spaces in typescript (no hard tabs)  
+* **Env handling**
+  * Update `.env.example` with *names* of new vars (never values).
+  * Boolean flags must be 'true'/'false' strings to avoid docker‑compose parsing quirks. 
+* **Secrets scan**
+  * Detect hard-coded keys and secrets → Refactor to env vars + update `.env.example` + note in session log need for adding new env var
+  * Add logs where needed, but ensure no sensitive values (tokens, IDs, secrets) are logged even in dev mode.  
+  * Run trufflehog on diff in CI workflow and full scan in nightly workflow
+* **Testing**
+  * If any new logic →  Always add or modify unit tests accordingly.  
+  * Jest / Vitest for JavaScript units
+  * Foundry for Solidity (if present)
+  * Cypress for front-end e2e (if present).
+* **Pull Requests**
+  * Keep pull request descriptions short, following [conventionalcommits](https://www.conventionalcommits.org/en/v1.0.0/)
+  * If any related issues are known, mention them in PR (e.g. "Isses: #10, #11")
+* **Session version tags**
+  * Follow SemVer (v2.0.0-alpha)
+  * Major IDs ("v1.0", "v2.0") mirror new feature branches
+  * Minor IDs ("v2.0", "v2.1") mirror different coding sesssions on the same feature branch
 
 ---
 
@@ -72,12 +90,12 @@ agent-setup.md           # One-time boot-strap guide for agents
 
 | Phase | File | Detail |
 |-------|------|--------|
-| **Bootstrap (first run)** | `agent-setup` | Creates folders, Husky hooks, CI scaffold, etc. Installs git-moji-cli for commit emojis (optional). |
+| **Bootstrap (first run)** | `https://raw.githubusercontent.com/KazanderDad/agent-context-seed-files/refs/heads/main/agent-setup.md` | Creates folders, Husky hooks, CI scaffold, etc. Installs git-moji-cli for commit emojis (optional). |
 | **Every session** | `workflow.md` | Mandatory checklist (log, spec update(s), code, summary). |
 | **Artefact maintenance** | Scripts inside `scripts/` | `env-sync.ts`, `spec-lint.ts`, etc. |
 | **CI Triggers** | Pushes to main and all PRs run forge test, forge coverage, pnpm lint, and hardhat size-contracts. |
 
-Agents **must** read `agent-setup.md` if artefacts are missing, otherwise follow `workflow.md` each time.
+Agents **must** read [agent-setup.md](https://raw.githubusercontent.com/KazanderDad/agent-context-seed-files/refs/heads/main/agent-setup.md) if artefacts are missing, otherwise follow `workflow.md` each time.
 
 ---
 
