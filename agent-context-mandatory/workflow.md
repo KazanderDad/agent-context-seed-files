@@ -97,7 +97,9 @@ Follow coding conventions from **AGENTS.md**, and also:
 ## 3. Lint and Test
 
 ### Post-code automated tasks
-Before committing, run `pnpm test` from the repository root. The script currently prints a placeholder message but acts as a sanity check.
+Before committing:
+- run `pnpm build` from the repository root to ensure type safety and catch any runtime compile errors.
+- run `pnpm test` from the repository root. The script currently prints a placeholder message but acts as a sanity check.
 
 ```bash
 pnpm env:sync           # update .env.example
