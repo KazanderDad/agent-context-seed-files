@@ -7,7 +7,9 @@
 - [ ] **Spec files**: Relevant spec(s) updated and bumped to version **v{N}**
 - [ ] **Agent instructions**: AGENTS.md updated with relevant changes, if any
 - [ ] **Lint**: `pnpm lint` passes *or* ESLint failure noted in commit
-- [ ] **Tests**: New or affected logic covered by unit tests
+- [ ] **Tests**:
+      - [ ] New or affected logic covered by unit tests
+      - [ ] E2E passes locally
 - [ ] **Environment**: `.env.example` updated with any new variable names
 - [ ] **SQL changes,** if any:  
       - [ ] Matching `sql-diff-v{N}` with **UP / DOWN** blocks committed  
