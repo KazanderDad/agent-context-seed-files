@@ -1,0 +1,52 @@
+name: Daily Supabase Sync
+
+on:
+  schedule:
+    - cron: '0 11 * * *'  # 6am EST
+  workflow_dispatch:
+
+jobs:
+  supabase-sync:
+    runs-on: ubuntu-latest
+    env:
+      REF: ${{ vars.SUPABASE_PROJECT_REF }}          # cspyqrxxyflnuwzzzkmv
+      PAT: ${{ secrets.SUPABASE_ACCESS_TOKEN }}      # personal access token
+      DB_PASS: ${{ secrets.SUPABASE_DB_PASSWORD }}    # Postgres password
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Login and link project
+        run: |
+          supabase login --token "$PAT" --no-browser --name "ci" --yes
+          supabase link --project-ref "$REF" --yes
+
+      - name: Pull live schema
+        run: |
+          mkdir -p supabase/migrations
+          supabase db pull --linked \
+            --password "$DB_PASS" \
+            --schema public
+
+      - name: Commit migrations
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore(migrations): refresh from Supabase"
+          file_pattern: supabase/migrations/*.sql
+
+      - name: Generate types
+        run: |
+          supabase gen types typescript --local > schema.gen.ts
+          if ! git diff --ignore-space-at-eol --exit-code --quiet schema.gen.ts; then
+            echo "Detected uncommitted changes after build. See status below:"
+            git diff
+            exit 1
+          fi
