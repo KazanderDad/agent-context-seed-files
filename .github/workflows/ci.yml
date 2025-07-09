@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:        # you can manually trigger the whole pipeline
+
+jobs:
+
+########################################################################
+# 1.  Normal build / lint job
+########################################################################
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1 – Check out code
+      - uses: actions/checkout@v4
+
+      # 2 – Install pnpm (and wire up its cache)
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+          run_install: false
+
+      # 3 – Install Node and enable dependency caching
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: '**/pnpm-lock.yaml'
+
+      # 4 – Install project dependencies
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      # 5 – Lint, spec, and ESLint checks
+      - name: Lint changed files
+        run: |
+          pnpm env:sync
+          pnpm lint:diff "${{ github.event.before }}" "${{ github.sha }}" > eslint.log || true
+      - name: Annotate ESLint results
+        if: always()
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          fail_on_error: false
+          eslint_input: eslint.log
+
+########################################################################
+# 2.  TruffleHog Scanning For Exposed Secrets and Keys
+########################################################################
+  trufflehog:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        # For PRs from forks, fetch only the diff to keep token scope minimal
+        with:
+          fetch-depth: 0
+
+      - name: Run TruffleHog on Diff
+        uses: trufflesecurity/trufflehog@v3.76.0
+        with:
+          path: .
+          # scan only the diff since last commit to keep runtime small
+          #   -- since the job runs on push to main, we compare to previous main commit
+          base: ${{ github.event.before }}
+          head: ${{ github.sha }}
+          extra_args: --only-verified
+
+      # Mark the job failed if secrets were found
+      - name: Fail on findings
+        run: |
+          if [ -f trufflehog-results.json ]; then
+            echo "🚨 Potential secrets detected"
+            cat trufflehog-results.json
+            exit 1
+          fi
