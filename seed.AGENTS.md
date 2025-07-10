@@ -20,7 +20,7 @@ alwaysApply: true
 ---
 
 ## 1 Repository Structure
-Source files are organized under the `contracts/evm/` directory while context files for agents are organized under agent-context/ with the following layout:
+Source files are organized under the `app/` directory while context files for agents are organized under agent-context/ with the following layout:
 ```
 .github/workflows/       # Mandatory - PR template + CI workflows for build, lint, supabase, secret scanning
 agent-context/           # designs, logs and other context files for developers and agents
